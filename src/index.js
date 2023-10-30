@@ -1,5 +1,4 @@
-const express = require("express");
-
+// const express = require("express");
 const http = require("http");
 const getUsers = require("./modules/users");
 const hostname = "127.0.0.1";
