@@ -16,6 +16,7 @@ const server = http.createServer(async (req, res) => {
       (res.setHeader = "Content-Type"), "text/plain";
       res.write("Enter a name");
       res.end();
+      return;
     }
     res.statusCode = 200;
     res.statusMessage = "OK";
@@ -38,15 +39,14 @@ const server = http.createServer(async (req, res) => {
     (res.setHeader = "Content-Type"), "text/plain";
     res.write("Hello world!");
     res.end();
-
     return;
   }
   res.statusCode = 500;
   res.statusMessage = "Internal Server Error";
   (res.setHeader = "Content-Type"), "text/plain";
-  res.write("");
+  res.write("wrong");
   res.end();
 });
 server.listen(port, hostname, () => {
-  console.log(`Сервер запущен по адресу http://${hostname}:${port}/`);
+  console.log(" curl http://127.0.0.1:3003?hello");
 });
