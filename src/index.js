@@ -32,6 +32,7 @@ const server = http.createServer(async (req, res) => {
     res.setHeader = "Content-Type: application/json";
     res.write(getUsers());
     res.end();
+    return;
   }
   if (req.url === "/") {
     res.statusCode = 200;
@@ -48,5 +49,5 @@ const server = http.createServer(async (req, res) => {
   res.end();
 });
 server.listen(port, hostname, () => {
-  console.log(" curl http://127.0.0.1:3003?hello");
+  console.log(" curl http://127.0.0.1:3003/");
 });
