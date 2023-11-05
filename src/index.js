@@ -1,53 +1,33 @@
-// const express = require("express");
-const http = require("http");
-const getUsers = require("./modules/users");
-const hostname = "127.0.0.1";
-const port = 3003;
+const express = require("express");
+const dotenv = require("dotenv");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const userRouter = require("./routes/users");
+const bookRouter = require("./routes/books");
+const corsOption = require("./middlewares/cors");
 
-const server = http.createServer(async (req, res) => {
-  const url = new URL(req.url, `http://${req.headers.host}`);
-  const params = url.searchParams;
-  const name = params.get("hello");
+dotenv.config();
 
-  if (params.has("hello")) {
-    if (name === "") {
-      res.statusCode = 400;
-      res.statusMessage = "Error";
-      (res.setHeader = "Content-Type"), "text/plain";
-      res.write("Enter a name");
-      res.end();
-      return;
-    }
-    res.statusCode = 200;
-    res.statusMessage = "OK";
-    (res.setHeader = "Content-Type"), "text/plain";
-    res.write(`Hello,${name}`);
-    res.end();
-    return;
-  }
+const { PORT = 3005, API_URL = "http://127.0.0.1" } = process.env;
 
-  if (req.url === "/?users") {
-    res.statusCode = 200;
-    res.statusMessage = "OK";
-    res.setHeader = "Content-Type: application/json";
-    res.write(getUsers());
-    res.end();
-    return;
-  }
-  if (req.url === "/") {
-    res.statusCode = 200;
-    res.statusMessage = "OK";
-    (res.setHeader = "Content-Type"), "text/plain";
-    res.write("Hello world!");
-    res.end();
-    return;
-  }
-  res.statusCode = 500;
-  res.statusMessage = "Internal Server Error";
-  (res.setHeader = "Content-Type"), "text/plain";
-  res.write("wrong");
-  res.end();
-});
-server.listen(port, hostname, () => {
-  console.log(" curl http://127.0.0.1:3003/");
+try {
+  mongoose.connect("mongodb://127.0.0.1:27017/backend");
+} catch (error) {
+  handleError(error);
+}
+
+const index = express();
+let corsOptions = {
+  origin: [API_URL],
+};
+
+index.use(cors(corsOptions));
+index.use(corsOption);
+index.use(bodyParser.json());
+index.use(bookRouter);
+index.use(userRouter);
+
+index.listen(PORT, function () {
+  console.log(`CORS-enabled, Сервер запущен по адресу : ${API_URL}:${PORT} `);
 });
