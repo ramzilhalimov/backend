@@ -2,7 +2,7 @@ const User = require("../models/user");
 
 // Получим всех пользователей из БД
 const getUsers = (req, res) => {
-  User.find({})
+  return User.find({})
     .then((user) => {
       res.status(200).send(user);
     })
@@ -14,9 +14,13 @@ const getUsers = (req, res) => {
 // Получим пользователя по ID
 const getUser = (req, res) => {
   const { user_id } = req.params;
-  User.findById(user_id)
+  return User.findById(user_id)
     .then((user) => {
-      res.status(200).send(user);
+      if (!user) {
+        response.status(404).send("User not found");
+      } else {
+        res.status(200).send(user);
+      }
     })
     .catch((e) => {
       res.status(500).send(e.message);
@@ -25,8 +29,7 @@ const getUser = (req, res) => {
 
 // Создаем пользователя
 const createUser = (req, res) => {
-  const data = req.body;
-  User.create(data)
+  return User.create({ ...req.body })
     .then((user) => {
       res.status(201).send(user);
     })
@@ -38,10 +41,13 @@ const createUser = (req, res) => {
 // Обновляем пользователя
 const updateUser = (req, res) => {
   const { user_id } = req.params;
-  const data = req.body;
-  User.findByIdAndUpdate(user_id, data, { new: true, runValidators: true })
+  return User.findByIdAndUpdate(user_id, { ...req.body })
     .then((user) => {
-      res.status(200).send(user);
+      if (!user) {
+        response.status(404).send("User not found");
+      } else {
+        res.status(200).send(user);
+      }
     })
     .catch((e) => {
       res.status(500).send(e.message);
@@ -51,9 +57,13 @@ const updateUser = (req, res) => {
 // Удаляем пользователя
 const deleteUser = (req, res) => {
   const { user_id } = req.params;
-  User.findByIdAndDelete(user_id)
+  return User.findByIdAndDelete(user_id)
     .then((user) => {
-      res.status(200).send("Ready");
+      if (!user) {
+        response.status(404).send("User not found");
+      } else {
+        res.status(200).send("Ready");
+      }
     })
     .catch((e) => {
       res.status(500).send(e.message);

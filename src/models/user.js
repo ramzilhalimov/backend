@@ -6,15 +6,15 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 2,
   },
-  username: {
+  lastName: {
     type: String,
     required: true,
     minlength: 2,
   },
-  email: {
+  username: {
     type: String,
     required: true,
-    minlength: 2,
+    minlength: 5,
   },
 });
 module.exports = mongoose.model("user", userSchema);
